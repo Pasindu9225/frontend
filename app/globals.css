@@ -118,3 +118,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide scrollbar in all browsers but keep the scroll functionality */
+.chat-area {
+  overflow-y: auto; /* Allows scrolling when needed */
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.chat-area::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar */
+}
+
+/* Hide scrollbar for Firefox */
+.chat-area {
+  scrollbar-width: none; /* Hide the scrollbar */
+}

@@ -1,17 +1,38 @@
 "use client";
 
+import { useState, useId } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useId } from "react";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 const Page = () => {
   const id = useId();
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:5000/api/users/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("Registered successfully!");
+      router.push("/login");
+    } else {
+      alert(data.message || "Registration failed");
+    }
+  };
 
   return (
     <section className="relative min-h-screen w-full bg-white dark:bg-gray-900 overflow-hidden flex items-center justify-center">
-      {/* Background Grid */}
       <FlickeringGrid
         className="absolute inset-0 z-0 w-full h-full"
         squareSize={9}
@@ -20,8 +41,6 @@ const Page = () => {
         maxOpacity={0.1}
         flickerChance={0.1}
       />
-
-      {/* Login Box */}
       <div className="relative z-10 w-full max-w-md rounded-lg border border-border bg-white/80 dark:bg-gray-950/90 backdrop-blur p-8 shadow-lg">
         <div className="flex flex-col items-center gap-2 mb-6">
           <div
@@ -34,7 +53,6 @@ const Page = () => {
               width="20"
               height="20"
               viewBox="0 0 32 32"
-              aria-hidden="true"
             >
               <circle cx="16" cy="16" r="12" fill="none" strokeWidth="8" />
             </svg>
@@ -47,33 +65,36 @@ const Page = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleRegister}>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor={`${id}-name`}>Full name</Label>
               <Input
                 id={`${id}-name`}
-                placeholder="Your name"
                 type="text"
                 required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor={`${id}-email`}>Email</Label>
               <Input
                 id={`${id}-email`}
-                placeholder="Sample@gmail.com"
                 type="email"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor={`${id}-password`}>Password</Label>
               <Input
                 id={`${id}-password`}
-                placeholder="Enter your password"
                 type="password"
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
@@ -91,9 +112,9 @@ const Page = () => {
         </Button>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
-          I alredy have an account{" "}
-          <a className="underline hover:no-underline" href="register">
-            Log-in
+          I already have an account{" "}
+          <a className="underline hover:no-underline" href="/login">
+            Log in
           </a>
           .
         </p>
