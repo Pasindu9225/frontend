@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { ArrowUpIcon } from "lucide-react";
-import Image from "next/image";
+import { ImageCard } from "../imagecard";
 
 type ChatMessage = {
   role: "user" | "bot";
@@ -93,13 +93,11 @@ export function VercelV0Chat() {
       }
 
       const data = await res.json();
-
-      // Check the response format
-      console.log(data); // Debugging the backend response
+      console.log(data);
 
       const botMessage: ChatMessage = {
         role: "bot",
-        content: data.imageUrl, // Assuming data.imageUrl is the correct URL
+        content: data.imageUrl,
         type: "image",
       };
 
@@ -128,37 +126,26 @@ export function VercelV0Chat() {
 
   return (
     <div className="flex flex-col h-screen w-full max-w-4xl mx-auto">
-      {/* Header */}
       {messages.length === 0 && (
-        <div className="text-4xl font-bold text-center text-black dark:text-white py-10">
-          What image would you like to generate?
+        <div className="text-4xl font-bold text-center mt-10 text-black dark:text-white py-10">
+          What&apos;s on your mind?
         </div>
       )}
 
-      {/* Chat Messages */}
-      <div
-        className="flex-1 overflow-y-scroll px-4 py-2 space-y-3 chat-area"
-        // Added className `chat-area` to hide the scrollbar
-      >
+      <div className="flex-1 overflow-y-scroll px-4 py-2 space-y-3 chat-area">
         {messages.map((msg, i) => (
           <div
             key={i}
             className={cn(
               "px-4 py-2 rounded-lg max-w-[75%] whitespace-pre-wrap",
               msg.role === "user"
-                ? "self-end bg-blue-600 text-white ml-auto"
-                : "self-start bg-gray-200 text-black"
+                ? "self-end bg-[rgba(55,65,81,0.4)] text-white ml-auto"
+                : "self-start text-black"
             )}
           >
             {msg.type === "image" ? (
               msg.content ? (
-                <Image
-                  src={msg.content} // Assuming content is a valid image URL
-                  alt="Generated Image"
-                  width={500}
-                  height={500}
-                  className="rounded-lg max-w-full"
-                />
+                <ImageCard src={msg.content} />
               ) : (
                 <div className="text-center text-red-500">
                   Image generation failed.
@@ -172,8 +159,7 @@ export function VercelV0Chat() {
         <div ref={scrollRef} />
       </div>
 
-      {/* Input Box */}
-      <div className="w-full bg-neutral-900 border-t border-neutral-800 px-4 py-3">
+      <div className="w-full bg-transparent rounded-4 border-t mb-9 border-neutral-800 px-4 py-3">
         <div className="relative rounded-xl border border-neutral-800">
           <Textarea
             ref={textareaRef}
@@ -185,7 +171,7 @@ export function VercelV0Chat() {
             onKeyDown={handleKeyDown}
             placeholder="Type your image prompt..."
             className={cn(
-              "w-full px-4 py-3 resize-none bg-transparent border-none text-white text-sm",
+              "w-full px-4 py-3 resize-none bg-neutral-800 border-none text-white text-sm",
               "focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
               "placeholder:text-neutral-500 placeholder:text-sm min-h-[60px]"
             )}
