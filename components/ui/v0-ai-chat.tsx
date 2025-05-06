@@ -127,8 +127,12 @@ export function VercelV0Chat() {
   return (
     <div className="flex flex-col h-screen w-full max-w-4xl mx-auto">
       {messages.length === 0 && (
-        <div className="text-4xl font-bold text-center mt-10 text-black dark:text-white py-10">
+        <div className="text-4xl font-bold text-center mt-20 text-black dark:text-white py-10">
           What&apos;s on your mind?
+          <div className=" text-xl font-light textblack opacity-35 mt-2">
+            Explain what you want to generate, Easy to generate your imagination
+            within few seconsd.
+          </div>
         </div>
       )}
 
